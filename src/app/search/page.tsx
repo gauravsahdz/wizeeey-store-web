@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -17,6 +16,9 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { SearchIcon } from 'lucide-react';
+import { Suspense } from "react";
+import { SearchResults } from "@/components/search/search-results";
+import { SearchResultsSkeleton } from "@/components/search/search-results-skeleton";
 
 const MAX_PRICE = Math.max(...mockProducts.map(p => p.price), 100); // Determine max price from products or default
 
@@ -75,100 +77,11 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 space-y-8">
-      <header className="space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight">Search Products</h1>
-        <div className="relative">
-          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search for t-shirts, jeans, dresses..."
-            className="w-full pl-10 text-base"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </header>
-
-      <div className="grid md:grid-cols-4 gap-8">
-        {/* Filters Sidebar */}
-        <aside className="md:col-span-1 space-y-6 p-4 border rounded-lg shadow-sm h-fit sticky top-24">
-          <h2 className="text-xl font-semibold">Filters</h2>
-          
-          {/* Category Filter */}
-          <div>
-            <Label htmlFor="category-filter" className="text-sm font-medium">Category</Label>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger id="category-filter">
-                <SelectValue placeholder="All Categories" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {mockCategories.map((category: Category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Price Range Filter */}
-          <div>
-            <Label className="text-sm font-medium">Price Range</Label>
-            <div className="mt-2">
-              <Slider
-                min={0}
-                max={MAX_PRICE}
-                step={1}
-                value={priceRange}
-                onValueChange={(value) => setPriceRange(value as [number, number])}
-                className="my-4"
-              />
-              <div className="flex justify-between text-sm text-muted-foreground">
-                <span>${priceRange[0]}</span>
-                <span>${priceRange[1]}</span>
-              </div>
-            </div>
-          </div>
-          
-           {/* Sort By Filter */}
-          <div>
-            <Label htmlFor="sort-by-filter" className="text-sm font-medium">Sort By</Label>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger id="sort-by-filter">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="relevance">Relevance</SelectItem>
-                <SelectItem value="price-asc">Price: Low to High</SelectItem>
-                <SelectItem value="price-desc">Price: High to Low</SelectItem>
-                <SelectItem value="name-asc">Name: A to Z</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-        </aside>
-
-        {/* Product Grid */}
-        <main className="md:col-span-3">
-          {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <SearchIcon className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
-              <h2 className="text-2xl font-semibold">No products found</h2>
-              <p className="text-muted-foreground">
-                Try adjusting your search or filters.
-              </p>
-            </div>
-          )}
-        </main>
-      </div>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Search Results</h1>
+      <Suspense fallback={<SearchResultsSkeleton />}>
+        <SearchResults />
+      </Suspense>
     </div>
   );
 }

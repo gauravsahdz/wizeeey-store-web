@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
-import type { Product } from "@/lib/types";
+import type { Product } from "@/types";
 
 interface ProductCardProps {
   product: Product;
@@ -13,9 +13,9 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
   return (
     <div className="group relative">
       <div className="aspect-square w-full overflow-hidden rounded-lg bg-muted">
-        <Link href={`/products/${product._id}`}>
+        <Link href={`/products/${product.id}`}>
           <Image
-            src={product.images[0] || "/images/placeholder.png"}
+            src={product.imageUrl || "/images/placeholder.png"}
             alt={product.name}
             width={500}
             height={500}
@@ -26,13 +26,13 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
       <div className="mt-4 flex justify-between">
         <div>
           <h3 className="text-sm font-medium">
-            <Link href={`/products/${product._id}`}>
+            <Link href={`/products/${product.id}`}>
               <span aria-hidden="true" className="absolute inset-0" />
               {product.name}
             </Link>
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            {product.category}
+            {product.categoryName}
           </p>
         </div>
         <p className="text-sm font-medium">${product.price}</p>
