@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { CartItem } from '@/types';

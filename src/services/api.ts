@@ -93,37 +93,37 @@ async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> 
 }
 
 // Product Endpoints
-export const getProducts = (): Promise<ApiProduct[]> => fetchApi<ApiProduct[]>('/products');
+export const getProducts = (): Promise<ApiProduct[]> => fetchApi<ApiProduct[]>('/api/products');
 export const getProductById = (id: string): Promise<ApiProduct | null> => fetchApi<ApiProduct | null>(`/products/${id}`);
 
 // Category Endpoints
-export const getCategories = (): Promise<ApiCategory[]> => fetchApi<ApiCategory[]>('/categories');
+export const getCategories = (): Promise<ApiCategory[]> => fetchApi<ApiCategory[]>('/api/categories');
 export const getCategoryById = (id: string): Promise<ApiCategory | null> => fetchApi<ApiCategory | null>(`/categories/${id}`);
 
 // FAQ Endpoints
-export const getFaqs = (): Promise<ApiFaqItem[]> => fetchApi<ApiFaqItem[]>('/faqs');
+export const getFaqs = (): Promise<ApiFaqItem[]> => fetchApi<ApiFaqItem[]>('/api/faqs');
 
 // Order Endpoints
 export const createOrder = (orderData: ApiOrderPayload): Promise<ApiOrder> => 
-  fetchApi<ApiOrder>('/orders', {
+  fetchApi<ApiOrder>('/api/orders', {
     method: 'POST',
     body: JSON.stringify(orderData),
   });
 
-export const getOrders = (): Promise<ApiOrder[]> => fetchApi<ApiOrder[]>('/orders');
+export const getOrders = (): Promise<ApiOrder[]> => fetchApi<ApiOrder[]>('/api/orders');
 
 // Auth Endpoints
 export const signupUser = (payload: SignUpPayload): Promise<AuthApiResponse> =>
-  fetchApi<AuthApiResponse>('/auth/signup', {
+  fetchApi<AuthApiResponse>('/api/auth/signup', {
     method: 'POST',
     body: JSON.stringify(payload),
   });
 
 export const signinUser = (payload: SignInPayload): Promise<AuthApiResponse> =>
-  fetchApi<AuthApiResponse>('/auth/signin', {
+  fetchApi<AuthApiResponse>('/api/auth/signin', {
     method: 'POST',
     body: JSON.stringify(payload),
   });
 
 // User Endpoint (whoami)
-export const getMe = (): Promise<ApiUser> => fetchApi<ApiUser>('/auth/me');
+export const getMe = (): Promise<ApiUser> => fetchApi<ApiUser>('/api/auth/me');

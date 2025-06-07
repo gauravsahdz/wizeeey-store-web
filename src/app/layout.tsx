@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-// import { GeistSans } from 'geist/font/sans'; // Removed problematic import
-// import { GeistMono } from 'geist/font/mono'; // Removed problematic import
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { APP_NAME } from '@/lib/constants';
 import { Header } from '@/components/layout/header';
@@ -12,8 +11,7 @@ import { AuthProvider } from '@/context/auth-context';
 import { AuthModal } from '@/components/modals/auth-modal';
 import { CheckoutModal } from '@/components/modals/checkout-modal';
 
-// const geistSans = GeistSans; // Removed GeistSans variable
-// const geistMono = GeistMono; // Removed GeistMono variable
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
@@ -29,15 +27,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en"><body className="antialiased flex flex-col min-h-screen">
+    <html lang="en"><body className={inter.className}>
         <AuthProvider>
           <ModalProvider>
             <CartProvider>
-              <Header />
-              <main className="flex-grow container px-4 py-8 md:px-6 md:py-12">
-                {children}
-              </main>
-              <Footer />
+              <div className="min-h-screen flex flex-col">
+                <Header />
+                <main className="flex-1">
+                  {children}
+                </main>
+                <Footer />
+              </div>
               <Toaster />
               <AuthModal />
               <CheckoutModal />

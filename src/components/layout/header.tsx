@@ -1,8 +1,7 @@
-
 "use client";
 
 import Link from 'next/link';
-import { ShoppingCart, User, Search, Menu, LogOut, UserCircle, Package, Home, List } from 'lucide-react';
+import { ShoppingCart, User, Search, Menu, LogOut, UserCircle, Package, Home, List, X } from 'lucide-react';
 import { APP_NAME, NAV_LINKS } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/cart-context';
@@ -19,12 +18,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from 'react';
+import { cn } from "@/lib/utils";
+
+const navigation = [
+  { name: "Home", href: "/" },
+  { name: "Explore", href: "/explore" },
+  { name: "Categories", href: "/categories" },
+  { name: "About", href: "/about" },
+];
 
 export function Header() {
   const { totalItems } = useCart();
   const { openAuthModal } = useModals();
   const { isAuthenticated, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const userInitials = user?.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : <User className="h-5 w-5" />;
 
@@ -115,73 +123,41 @@ export function Header() {
           )}
           
           {/* Mobile Menu Trigger */}
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-              <nav className="flex flex-col gap-4 mt-8">
-                {NAV_LINKS.map((link) => (
-                  <SheetClose asChild key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-lg font-medium text-foreground transition-colors hover:text-primary flex items-center gap-2"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {link.label === "Home" && <Home className="h-5 w-5" />}
-                      {link.label === "Categories" && <List className="h-5 w-5" />}
-                      {link.label === "Search" && <Search className="h-5 w-5" />}
-                      {link.label}
-                    </Link>
-                  </SheetClose>
-                ))}
-                <SheetClose asChild>
-                  <Link
-                    href="/search"
-                    className="text-lg font-medium text-foreground transition-colors hover:text-primary flex items-center gap-2"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Search className="h-5 w-5" /> Search
-                  </Link>
-                </SheetClose>
-                {isAuthenticated && (
-                  <>
-                    <DropdownMenuSeparator className="my-2" />
-                     <SheetClose asChild>
-                        <Link
-                            href="/account/profile"
-                            className="text-lg font-medium text-foreground transition-colors hover:text-primary flex items-center gap-2"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            <UserCircle className="h-5 w-5" /> Profile
-                        </Link>
-                     </SheetClose>
-                     <SheetClose asChild>
-                        <Link
-                            href="/account/orders"
-                            className="text-lg font-medium text-foreground transition-colors hover:text-primary flex items-center gap-2"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            <Package className="h-5 w-5" /> My Orders
-                        </Link>
-                     </SheetClose>
-                    <SheetClose asChild>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start text-lg font-medium text-destructive hover:text-destructive flex items-center gap-2 p-0"
-                        onClick={() => { logout(); setIsMobileMenuOpen(false); }}
-                      >
-                        <LogOut className="h-5 w-5" /> Log out
-                      </Button>
-                    </SheetClose>
-                  </>
-                )}
-              </nav>
-            </SheetContent>
-          </Sheet>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      <div
+        className={cn(
+          "fixed inset-0 top-16 z-50 bg-background md:hidden",
+          isMenuOpen ? "block" : "hidden"
+        )}
+      >
+        <div className="container px-4 py-6">
+          <div className="flex flex-col gap-4">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-lg font-medium transition-colors hover:text-primary"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </header>

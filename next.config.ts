@@ -16,8 +16,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
-      // If AI might return images from other known CDNs, add them here.
-      // For data URIs, no remotePatterns configuration is needed.
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/**',
+      },
     ],
   },
 };

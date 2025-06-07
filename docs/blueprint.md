@@ -1,4 +1,4 @@
-# **App Name**: Thread Canvas
+# **App Name**: Wizzzey Store
 
 ## Core Features:
 
